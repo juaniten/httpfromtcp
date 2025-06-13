@@ -5,23 +5,31 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"os"
+	"net"
 	"strings"
 )
 
-const filePath = "./messages.txt"
-
 func main() {
-	f, err := os.Open(filePath)
+	listener, err := net.Listen("tcp", "127.0.0.1:42069")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Error opening TCP listener: %v", err)
 	}
-	defer f.Close()
+	defer listener.Close()
 
-	ch := getLinesChannel(f)
-
-	for line := range ch {
-		fmt.Println("read:", line)
+	for {
+		connection, err := listener.Accept()
+		if err != nil {
+			fmt.Printf("error accepting TCP connection: %v", err)
+		}
+		fmt.Println()
+		fmt.Println("TCP connection accepted")
+		fmt.Println("-----------------------")
+		linesChannel := getLinesChannel(connection)
+		for line := range linesChannel {
+			fmt.Println(line)
+		}
+		fmt.Println("-----------------------")
+		fmt.Println("TCP connection closed")
 	}
 
 }
