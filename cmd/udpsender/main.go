@@ -26,12 +26,12 @@ func main() {
 		fmt.Print(">")
 		line, err := reader.ReadString(byte('\n'))
 		if err != nil {
-			fmt.Printf("error reading line from standard input: %v\n", err)
+			fmt.Printf("Error reading line from standard input: %v\n", err)
 		}
 
 		_, err = connection.Write(([]byte)(line))
 		if err != nil {
-			fmt.Printf("error writing line though UDP connection: %v\n", err)
+			fmt.Printf("Error writing line though UDP connection: %v\n", err)
 		}
 
 	}
